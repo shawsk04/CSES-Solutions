@@ -105,21 +105,27 @@ void primeFactors(int n) {
 
 
 void solve() {
-	int n;
-	cin >> n;
+	int n; cin >> n;
+	vector<string> a;
+	for (int i = 0; i < n; i++) {
+		string s; cin >> s;
+		a.pb(s);
+	}
+	dbg(a);
 
-	int dp[n + 1];
-	memset(dp, 0, sizeof(dp));
-	dp[0] = 1;
+	int dp[n + 1][n + 1];
+	for (int i = 0; i < n + 1; i++) {
+		memset(dp[i], 0, sizeof(dp[i]));
+	}
+	dp[0][1] = 1;
 	for (int i = 1; i <= n; i++) {
-		for (int j = 1; j <= 6; j++) {
-			if (j > i) break;
-			dp[i] = modSum(dp[i], dp[i - j], mod);
+		for (int j = 1; j <= n; j++) {
+			if (a[i - 1][j - 1] == '*') continue;
+			else dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % mod;
 		}
 	}
 
-	cout << dp[n] << nl;
-	dbg(dp)
+	cout << dp[n][n] << nl;
 
 }
 
@@ -127,13 +133,13 @@ signed main() {
 	ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
 
 #ifdef SHAWSK
-	freopen("Input.txt", "r", stdin);
-	freopen("Output.txt", "w", stdout);
-	freopen("Error.txt", "w", stderr);
+	freopen("../Input.txt", "r", stdin);
+	freopen("../Output.txt", "w", stdout);
+	freopen("../Error.txt", "w", stderr);
 #endif
 
 	int T = 1;
-	cin >> T;
+	//cin >> T;
 	while (T--) {
 		solve();
 	}
